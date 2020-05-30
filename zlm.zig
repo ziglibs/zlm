@@ -10,7 +10,7 @@ pub fn toRadians(deg: var) @typeOf(deg) {
 }
 
 /// Converts radian to degree
-pub fn toDegrees(rad: var) @typeOf(deg) {
+pub fn toDegrees(rad: var) @typeOf(rad) {
     return 180.0 * rad / std.math.pi;
 }
 
