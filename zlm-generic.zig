@@ -179,8 +179,8 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, context: var, comptime Errors: type, output: fn (@typeOf(context), []const u8) Errors!void) Errors!void {
-                try std.fmt.format(context, Errors, output, "vec2({d:.2}, {d:.2})", value.x, value.y);
+            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: var) !void {
+                try stream.print("vec2({d:.2}, {d:.2})", .{ value.x, value.y });
             }
 
             fn getField(vec: Self, comptime index: comptime_int) Real {
@@ -225,8 +225,8 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, context: var, comptime Errors: type, output: fn (@typeOf(context), []const u8) Errors!void) Errors!void {
-                try std.fmt.format(context, Errors, output, "vec3({d:.2}, {d:.2}, {d:.2})", value.x, value.y, value.z);
+            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: var) !void {
+                try stream.print("vec3({d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z });
             }
 
             /// calculates the cross product. result will be perpendicular to a and b.
@@ -331,8 +331,8 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, context: var, comptime Errors: type, output: fn (@typeOf(context), []const u8) Errors!void) Errors!void {
-                try std.fmt.format(context, Errors, output, "vec4({d:.2}, {d:.2}, {d:.2}, {d:.2})", value.x, value.y, value.z, value.w);
+            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: var) !void {
+                try stream.print("vec4({d:.2}, {d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z, value.w });
             }
 
             /// multiplies the vector with a matrix.
@@ -410,15 +410,15 @@ pub fn specializeOn(comptime Real: type) type {
                 },
             };
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, context: var, comptime Errors: type, output: fn (@typeOf(context), []const u8) Errors!void) Errors!void {
-                try output(context, "mat4{");
+            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: var) !void {
+                try stream.writeAll("mat4{");
 
                 inline for ([_]comptime_int{ 0, 1, 2, 3 }) |i| {
                     const row = value.fields[i];
-                    try std.fmt.format(context, Errors, output, " ({d:.2} {d:.2} {d:.2} {d:.2})", row[0], row[1], row[2], row[3]);
+                    try stream.print(" ({d:.2} {d:.2} {d:.2} {d:.2})", .{ row[0], row[1], row[2], row[3] });
                 }
 
-                try output(context, " }");
+                try stream.writeAll(" }");
             }
 
             /// performs matrix multiplication of a*b
