@@ -167,6 +167,7 @@ pub fn specializeOn(comptime Real: type) type {
             y: Real,
 
             pub const zero = Self.new(0, 0);
+            pub const one = Self.new(1, 1);
             pub const unitX = Self.new(1, 0);
             pub const unitY = Self.new(0, 1);
 
@@ -211,6 +212,7 @@ pub fn specializeOn(comptime Real: type) type {
             z: Real,
 
             pub const zero = Self.new(0, 0, 0);
+            pub const one = Self.new(1, 1, 1);
             pub const unitX = Self.new(1, 0, 0);
             pub const unitY = Self.new(0, 1, 0);
             pub const unitZ = Self.new(0, 0, 1);
@@ -315,6 +317,7 @@ pub fn specializeOn(comptime Real: type) type {
             w: Real,
 
             pub const zero = Self.new(0, 0, 0, 0);
+            pub const one = Self.new(1, 1, 1, 1);
             pub const unitX = Self.new(1, 0, 0, 0);
             pub const unitY = Self.new(0, 1, 0, 0);
             pub const unitZ = Self.new(0, 0, 1, 0);
