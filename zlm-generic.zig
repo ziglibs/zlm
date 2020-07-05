@@ -575,6 +575,20 @@ pub fn specializeOn(comptime Real: type) type {
                 result.fields[3][2] = -near / (far - near);
                 return result;
             }
+
+            /// Batch matrix multiplication. Will multiply all matrices from "first" to "last".
+            pub fn batchMul(items: []const Self) Self {
+                if (items.len == 0)
+                    return Self.identity;
+                if (items.len == 1)
+                    return items[0];
+                var value = items[0];
+                var i: usize = 1;
+                while (i < items.len) : (i += 1) {
+                    value = value.mul(items[i]);
+                }
+                return value;
+            }
         };
 
         /// constructs a new Vec2.
