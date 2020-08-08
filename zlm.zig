@@ -7,12 +7,12 @@ comptime {
 }
 
 /// Converts degrees to radian
-pub fn toRadians(deg: var) @TypeOf(deg) {
+pub fn toRadians(deg: anytype) @TypeOf(deg) {
     return std.math.pi * deg / 180.0;
 }
 
 /// Converts radian to degree
-pub fn toDegrees(rad: var) @TypeOf(rad) {
+pub fn toDegrees(rad: anytype) @TypeOf(rad) {
     return 180.0 * rad / std.math.pi;
 }
 

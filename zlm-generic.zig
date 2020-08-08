@@ -180,7 +180,7 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: var) !void {
+            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.print("vec2({d:.2}, {d:.2})", .{ value.x, value.y });
             }
 
@@ -227,7 +227,7 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: var) !void {
+            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.print("vec3({d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z });
             }
 
@@ -334,7 +334,7 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: var) !void {
+            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.print("vec4({d:.2}, {d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z, value.w });
             }
 
@@ -413,7 +413,7 @@ pub fn specializeOn(comptime Real: type) type {
                 },
             };
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: var) !void {
+            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.writeAll("mat4{");
 
                 inline for ([_]comptime_int{ 0, 1, 2, 3 }) |i| {
