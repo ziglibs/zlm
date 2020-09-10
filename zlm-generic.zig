@@ -321,7 +321,7 @@ pub fn specializeOn(comptime Real: type) type {
             pub const unitX = Self.new(1, 0, 0, 0);
             pub const unitY = Self.new(0, 1, 0, 0);
             pub const unitZ = Self.new(0, 0, 1, 0);
-            pub const unitW = Self.new(0, 0, 1, 0);
+            pub const unitW = Self.new(0, 0, 0, 1);
 
             usingnamespace VectorMixin(Self);
 
