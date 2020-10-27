@@ -3,7 +3,7 @@ const std = @import("std");
 pub const specializeOn = @import("zlm-generic.zig").specializeOn;
 
 comptime {
-    @import("std").meta.refAllDecls(@This());
+    @import("std").testing.refAllDecls(@This());
 }
 
 /// Converts degrees to radian
