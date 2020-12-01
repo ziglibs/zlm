@@ -527,12 +527,17 @@ pub fn specializeOn(comptime Real: type) type {
             }
 
             /// creates matrix that will scale a homogeneous matrix.
-            pub fn createScale(scale: Real) Self {
+            pub fn createUniformScale(scale: Real) Self {
+                return createScale(scale, scale, scale);
+            }
+
+            /// Creates a non-uniform scaling matrix
+            pub fn createScale(x: Real, y: Real, z: Real) Self {
                 return Self{
                     .fields = [4][4]Real{
-                        [4]Real{ scale, 0, 0, 0 },
-                        [4]Real{ 0, scale, 0, 0 },
-                        [4]Real{ 0, 0, scale, 0 },
+                        [4]Real{ x, 0, 0, 0 },
+                        [4]Real{ 0, y, 0, 0 },
+                        [4]Real{ 0, 0, z, 0 },
                         [4]Real{ 0, 0, 0, 1 },
                     },
                 };
