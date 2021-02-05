@@ -94,6 +94,15 @@ pub fn specializeOn(comptime Real: type) type {
                         Self.zero;
                 }
 
+                /// applies component-wise absolute values
+                pub fn abs(a: Self) Self {
+                    var result: Self = undefined;
+                    inline for (@typeInfo(Self).Struct.fields) |fld| {
+                        @field(result, fld.name) = std.math.absFloat(@field(a, fld.name));
+                    }
+                    return result;
+                }
+
                 /// swizzle vector fields into a new vector type.
                 /// swizzle("xxx") will return a Vec3 with three times the x component.
                 /// swizzle will return a vector or scalar type with the same number of components as the
