@@ -122,8 +122,7 @@ pub fn specializeOn(comptime Real: type) type {
                     var result: T = undefined;
 
                     if (components.len > 1) {
-                        const fieldorder = "xyzw";
-                        inline for (components) |c, i| {
+                        inline for (components) |_, i| {
                             const slice = components[i .. i + 1];
                             const temp = if (comptime std.mem.eql(u8, slice, "0"))
                                 0
@@ -189,7 +188,7 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: anytype) !void {
+            pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.print("vec2({d:.2}, {d:.2})", .{ value.x, value.y });
             }
 
@@ -236,7 +235,7 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: anytype) !void {
+            pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.print("vec3({d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z });
             }
 
@@ -343,7 +342,7 @@ pub fn specializeOn(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: anytype) !void {
+            pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.print("vec4({d:.2}, {d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z, value.w });
             }
 
@@ -422,7 +421,7 @@ pub fn specializeOn(comptime Real: type) type {
                 },
             };
 
-            pub fn format(value: Self, comptime fmt: []const u8, options: std.fmt.FormatOptions, stream: anytype) !void {
+            pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.writeAll("mat4{");
 
                 inline for ([_]comptime_int{ 0, 1, 2, 3 }) |i| {
