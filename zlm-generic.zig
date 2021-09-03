@@ -374,7 +374,7 @@ pub fn specializeOn(comptime Real: type) type {
             fields: [2][2]Real, // [row][col]
 
             /// identitiy matrix
-            pub const identity = Self{
+            pub const identity = Mat2{
                 .fields = [2]Real{
                     [2]Real{ 1, 0 },
                     [2]Real{ 0, 1 },
@@ -387,7 +387,7 @@ pub fn specializeOn(comptime Real: type) type {
             fields: [3][3]Real, // [row][col]
 
             /// identitiy matrix
-            pub const identity = Self{
+            pub const identity = Mat3{
                 .fields = [3]Real{
                     [3]Real{ 1, 0, 0 },
                     [3]Real{ 0, 1, 0 },
