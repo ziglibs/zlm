@@ -164,6 +164,10 @@ pub fn specializeOn(comptime Real: type) type {
                     }
                     return result;
                 }
+
+                pub fn lerp(a: Self, b: Self, f: f32) Self {
+                    return a.add(b.sub(a).scale(f));
+                }
             };
         }
 
