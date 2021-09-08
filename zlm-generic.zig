@@ -19,6 +19,15 @@ pub fn specializeOn(comptime Real: type) type {
         /// Reduces the amount of duplicated code by a lot
         fn VectorMixin(comptime Self: type) type {
             return struct {
+                /// Initializes all values of the vector with the given value.
+                pub fn all(value: Real) Self {
+                    var result: Self = undefined;
+                    inline for (@typeInfo(Self).Struct.fields) |fld| {
+                        @field(result, fld.name) = value;
+                    }
+                    return result;
+                }
+
                 /// adds all components from `a` with the components of `b`.
                 pub fn add(a: Self, b: Self) Self {
                     var result: Self = undefined;
@@ -167,6 +176,30 @@ pub fn specializeOn(comptime Real: type) type {
 
                 pub fn lerp(a: Self, b: Self, f: f32) Self {
                     return a.add(b.sub(a).scale(f));
+                }
+
+                pub fn eql(a: Self, b: Self) bool {
+                    inline for (@typeInfo(Self).Struct.fields) |fld| {
+                        if (@field(a, fld.name) != @field(b, fld.name))
+                            return false;
+                    }
+                    return true;
+                }
+
+                pub fn approxEqAbs(a: Self, b: Self, tolerance: Real) bool {
+                    inline for (@typeInfo(Self).Struct.fields) |fld| {
+                        if (!std.math.approxEqAbs(Real, @field(a, fld.name), @field(b, fld.name), tolerance))
+                            return false;
+                    }
+                    return true;
+                }
+
+                pub fn approxEqRel(a: Self, b: Self, tolerance: Real) bool {
+                    inline for (@typeInfo(Self).Struct.fields) |fld| {
+                        if (!std.math.approxEqRel(Real, @field(a, fld.name), @field(b, fld.name), tolerance))
+                            return false;
+                    }
+                    return true;
                 }
             };
         }
@@ -674,18 +707,12 @@ pub fn specializeOn(comptime Real: type) type {
         };
 
         /// constructs a new Vec2.
-        pub fn vec2(x: Real, y: Real) Vec2 {
-            return Vec2.new(x, y);
-        }
+        pub const vec2 = Vec2.new;
 
         /// constructs a new Vec3.
-        pub fn vec3(x: Real, y: Real, z: Real) Vec3 {
-            return Vec3.new(x, y, z);
-        }
+        pub const vec3 = Vec3.new;
 
         /// constructs a new Vec4.
-        pub fn vec4(x: Real, y: Real, z: Real, w: Real) Vec4 {
-            return Vec4.new(x, y, z, w);
-        }
+        pub const vec4 = Vec4.new;
     };
 }
