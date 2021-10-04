@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub const specializeOn = @import("zlm-generic.zig").specializeOn;
+pub const SpecializeOn = @import("zlm-generic.zig").SpecializeOn;
 
 /// Converts degrees to radian
 pub fn toRadians(deg: anytype) @TypeOf(deg) {
@@ -13,4 +13,4 @@ pub fn toDegrees(rad: anytype) @TypeOf(rad) {
 }
 
 // export all vectors by-default to f32
-usingnamespace specializeOn(f32);
+usingnamespace SpecializeOn(f32);

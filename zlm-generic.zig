@@ -1,7 +1,7 @@
 const std = @import("std");
 
 /// Makes all vector and matrix types generic against Real
-pub fn specializeOn(comptime Real: type) type {
+pub fn SpecializeOn(comptime Real: type) type {
     return struct {
         /// Helper for the swizzle operator.
         /// Returns the type fitting the number of swizzle elements
