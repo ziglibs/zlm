@@ -246,6 +246,13 @@ pub fn SpecializeOn(comptime Real: type) type {
                 }
                 return result;
             }
+
+            pub fn rotate(vec: Self, angle: f32) Self {
+                return Self{
+                    .x = @cos(angle) * vec.x - @sin(angle) * vec.y,
+                    .y = @sin(angle) * vec.x + @cos(angle) * vec.y,
+                };
+            }
         };
 
         /// 3-dimensional vector type.
