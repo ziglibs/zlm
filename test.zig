@@ -1,9 +1,27 @@
-const zlm = @import("zlm.zig");
+const std = @import("std");
+const math = @import("zlm.zig");
+const assert = std.debug.assert;
 
-const assert = @import("std").debug.assert;
+const vec2 = math.vec2;
+const vec3 = math.vec3;
+const vec4 = math.vec4;
 
-comptime {
-    @import("std").testing.refAllDecls(zlm);
+const Vec2 = math.Vec2;
+const Vec3 = math.Vec3;
+const Vec4 = math.Vec4;
+
+const Mat3 = math.Mat3;
+const Mat4 = math.Mat4;
+
+test "default generic is f32" {
+    const T = @TypeOf(vec2(1,2).x);
+    try std.testing.expectEqual(T, f32);
+}
+
+test "SpecializeOn()" {
+    const math_u64 = math.SpecializeOn(u64);
+    const T = @TypeOf(math_u64.vec2(3,4).x);
+    try std.testing.expectEqual(T, u64);
 }
 
 test "constructors" {
