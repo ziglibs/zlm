@@ -55,7 +55,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                     return result;
                 }
 
-                /// divides all components from `a` by the components of `b`.
+                /// divides all co<mponents from `a` by the components of `b`.
                 pub fn div(a: Self, b: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
@@ -174,6 +174,8 @@ pub fn SpecializeOn(comptime Real: type) type {
                     return result;
                 }
 
+                /// linear interpolation between two vectors
+                /// only works on float vectors (Real must be a float)
                 pub fn lerp(a: Self, b: Self, f: Real) Self {
                     return a.add(b.sub(a).scale(f));
                 }
@@ -247,6 +249,8 @@ pub fn SpecializeOn(comptime Real: type) type {
                 return result;
             }
 
+            /// rotates the vector around the origin
+            /// only works on float vectors (Real must be a float)
             pub fn rotate(vec: Self, angle: Real) Self {
                 return Self{
                     .x = @cos(angle) * vec.x - @sin(angle) * vec.y,
@@ -647,6 +651,8 @@ pub fn SpecializeOn(comptime Real: type) type {
                 return value;
             }
 
+            /// calculates the invert matrix when it's possible (returns null otherwise)
+            /// only works on float matrices
             pub fn invert(src: Self) ?Self {
                 // https://github.com/stackgl/gl-mat4/blob/master/invert.js
                 const a = @bitCast([16]Real, src.fields);
