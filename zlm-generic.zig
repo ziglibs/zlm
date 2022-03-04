@@ -174,7 +174,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                     return result;
                 }
 
-                pub fn lerp(a: Self, b: Self, f: f32) Self {
+                pub fn lerp(a: Self, b: Self, f: Real) Self {
                     return a.add(b.sub(a).scale(f));
                 }
 
@@ -247,7 +247,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 return result;
             }
 
-            pub fn rotate(vec: Self, angle: f32) Self {
+            pub fn rotate(vec: Self, angle: Real) Self {
                 return Self{
                     .x = @cos(angle) * vec.x - @sin(angle) * vec.y,
                     .y = @sin(angle) * vec.x + @cos(angle) * vec.y,
@@ -649,7 +649,7 @@ pub fn SpecializeOn(comptime Real: type) type {
 
             pub fn invert(src: Self) ?Self {
                 // https://github.com/stackgl/gl-mat4/blob/master/invert.js
-                const a = @bitCast([16]f32, src.fields);
+                const a = @bitCast([16]Real, src.fields);
 
                 const a00 = a[0];
                 const a01 = a[1];
@@ -684,12 +684,12 @@ pub fn SpecializeOn(comptime Real: type) type {
                 // Calculate the determinant
                 var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 
-                if (std.math.approxEqAbs(f32, det, 0, 1e-8)) {
+                if (std.math.approxEqAbs(Real, det, 0, 1e-8)) {
                     return null;
                 }
                 det = 1.0 / det;
 
-                const out = [16]f32{
+                const out = [16]Real{
                     (a11 * b11 - a12 * b10 + a13 * b09) * det, // 0
                     (a02 * b10 - a01 * b11 - a03 * b09) * det, // 1
                     (a31 * b05 - a32 * b04 + a33 * b03) * det, // 2
@@ -708,7 +708,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                     (a20 * b03 - a21 * b01 + a22 * b00) * det, // 15
                 };
                 return Self{
-                    .fields = @bitCast([4][4]f32, out),
+                    .fields = @bitCast([4][4]Real, out),
                 };
             }
         };
