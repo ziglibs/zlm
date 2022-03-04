@@ -55,7 +55,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                     return result;
                 }
 
-                /// divides all co<mponents from `a` by the components of `b`.
+                /// divides all components from `a` by the components of `b`.
                 pub fn div(a: Self, b: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
