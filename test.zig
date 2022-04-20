@@ -14,13 +14,13 @@ const Mat3 = math.Mat3;
 const Mat4 = math.Mat4;
 
 test "default generic is f32" {
-    const T = @TypeOf(vec2(1,2).x);
+    const T = @TypeOf(vec2(1, 2).x);
     try std.testing.expectEqual(T, f32);
 }
 
 test "SpecializeOn()" {
     const math_u64 = math.SpecializeOn(u64);
-    const T = @TypeOf(math_u64.vec2(3,4).x);
+    const T = @TypeOf(math_u64.vec2(3, 4).x);
     try std.testing.expectEqual(T, u64);
 }
 
