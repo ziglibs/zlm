@@ -85,7 +85,7 @@ pub fn SpecializeOn(comptime Real: type) type {
 
                 /// returns the magnitude of the vector.
                 pub fn length(a: Self) Real {
-                    return std.math.sqrt(a.length2());
+                    return @sqrt(a.length2());
                 }
 
                 /// returns the squared magnitude of the vector.
@@ -547,9 +547,9 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// `aspect` is the screen aspect ratio (width / height)
             /// `near` is the distance of the near clip plane, whereas `far` is the distance to the far clip plane.
             pub fn createPerspective(fov: Real, aspect: Real, near: Real, far: Real) Self {
-                std.debug.assert(std.math.fabs(aspect - 0.001) > 0);
+                std.debug.assert(@fabs(aspect - 0.001) > 0);
 
-                const tanHalfFovy = std.math.tan(fov / 2);
+                const tanHalfFovy = @tan(fov / 2);
 
                 var result = Self.zero;
                 result.fields[0][0] = 1.0 / (aspect * tanHalfFovy);
@@ -562,8 +562,8 @@ pub fn SpecializeOn(comptime Real: type) type {
 
             /// creates a rotation matrix around a certain axis.
             pub fn createAngleAxis(axis: Vec3, angle: Real) Self {
-                var cos = std.math.cos(angle);
-                var sin = std.math.sin(angle);
+                var cos = @cos(angle);
+                var sin = @sin(angle);
                 var x = axis.x;
                 var y = axis.y;
                 var z = axis.z;
