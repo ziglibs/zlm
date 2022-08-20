@@ -218,7 +218,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             pub const unitX = Self.new(1, 0);
             pub const unitY = Self.new(0, 1);
 
-            usingnamespace VectorMixin(Self);
+            pub usingnamespace VectorMixin(Self);
 
             pub fn new(x: Real, y: Real) Self {
                 return Self{
@@ -273,7 +273,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             pub const unitY = Self.new(0, 1, 0);
             pub const unitZ = Self.new(0, 0, 1);
 
-            usingnamespace VectorMixin(Self);
+            pub usingnamespace VectorMixin(Self);
 
             pub fn new(x: Real, y: Real, z: Real) Self {
                 return Self{
@@ -379,7 +379,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             pub const unitZ = Self.new(0, 0, 1, 0);
             pub const unitW = Self.new(0, 0, 0, 1);
 
-            usingnamespace VectorMixin(Self);
+            pub usingnamespace VectorMixin(Self);
 
             pub fn new(x: Real, y: Real, z: Real, w: Real) Self {
                 return Self{

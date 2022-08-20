@@ -13,4 +13,4 @@ pub fn toDegrees(rad: anytype) @TypeOf(rad) {
 }
 
 // export all vectors by-default to f32
-usingnamespace SpecializeOn(f32);
+pub usingnamespace SpecializeOn(f32);
