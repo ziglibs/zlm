@@ -288,6 +288,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             }
 
             /// calculates the cross product. result will be perpendicular to a and b.
+            /// see: https://registry.khronos.org/OpenGL-Refpages/gl4/html/cross.xhtml
             pub fn cross(a: Self, b: Self) Self {
                 return Self{
                     .x = a.y * b.z - a.z * b.y,
