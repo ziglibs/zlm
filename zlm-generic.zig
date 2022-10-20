@@ -93,6 +93,16 @@ pub fn SpecializeOn(comptime Real: type) type {
                     return Self.dot(a, a);
                 }
 
+                /// returns the distance between `a` and `b`.
+                pub fn distance(a: Self, b: Self) Real {
+                    return @sqrt(distance2(a, b));
+                }
+
+                /// returns the squared distance between `a` and `b`.
+                pub fn distance2(a: Self, b: Self) Real {
+                    return a.sub(b).length2();
+                }
+
                 /// returns either a normalized vector (`length() = 1`) or `zero` if the vector
                 /// has length 0.
                 pub fn normalize(vec: Self) Self {
