@@ -117,7 +117,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 pub fn abs(a: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
-                        @field(result, fld.name) = std.math.absFloat(@field(a, fld.name));
+                        @field(result, fld.name) = std.math.fabs(@field(a, fld.name));
                     }
                     return result;
                 }
