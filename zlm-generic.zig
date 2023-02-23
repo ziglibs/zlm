@@ -141,7 +141,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                     var result: T = undefined;
 
                     if (components.len > 1) {
-                        inline for (components) |_, i| {
+                        inline for (0..components.len) |i| {
                             const slice = components[i .. i + 1];
                             const temp = if (comptime std.mem.eql(u8, slice, "0"))
                                 0
@@ -252,7 +252,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// multiplies the vector with a matrix.
             pub fn transform(vec: Self, mat: Mat2) Self {
                 var result = zero;
-                inline for ([_]comptime_int{ 0, 1 }) |i| {
+                inline for (0..2) |i| {
                     result.x += vec.getField(i) * mat.fields[0][i];
                     result.y += vec.getField(i) * mat.fields[1][i];
                 }
@@ -346,7 +346,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// multiplies the vector with a matrix.
             pub fn transform(vec: Self, mat: Mat3) Self {
                 var result = zero;
-                inline for ([_]comptime_int{ 0, 1, 2 }) |i| {
+                inline for (0..3) |i| {
                     result.x += vec.getField(i) * mat.fields[0][i];
                     result.y += vec.getField(i) * mat.fields[1][i];
                     result.z += vec.getField(i) * mat.fields[2][i];
@@ -408,7 +408,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// multiplies the vector with a matrix.
             pub fn transform(vec: Self, mat: Mat4) Self {
                 var result = zero;
-                inline for ([_]comptime_int{ 0, 1, 2, 3 }) |i| {
+                inline for (0..4) |i| {
                     result.x += vec.getField(i) * mat.fields[i][0];
                     result.y += vec.getField(i) * mat.fields[i][1];
                     result.z += vec.getField(i) * mat.fields[i][2];
@@ -483,7 +483,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
                 try stream.writeAll("mat4{");
 
-                inline for ([_]comptime_int{ 0, 1, 2, 3 }) |i| {
+                inline for (0..4) |i| {
                     const row = value.fields[i];
                     try stream.print(" ({d:.2} {d:.2} {d:.2} {d:.2})", .{ row[0], row[1], row[2], row[3] });
                 }
@@ -494,10 +494,10 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// performs matrix multiplication of a*b
             pub fn mul(a: Self, b: Self) Self {
                 var result: Self = undefined;
-                inline for ([_]comptime_int{ 0, 1, 2, 3 }) |row| {
-                    inline for ([_]comptime_int{ 0, 1, 2, 3 }) |col| {
+                inline for (0..4) |row| {
+                    inline for (0..4) |col| {
                         var sum: Real = 0.0;
-                        inline for ([_]comptime_int{ 0, 1, 2, 3 }) |i| {
+                        inline for (0..4) |i| {
                             sum += a.fields[row][i] * b.fields[i][col];
                         }
                         result.fields[row][col] = sum;
@@ -510,8 +510,8 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// this will swap columns with rows.
             pub fn transpose(a: Self) Self {
                 var result: Self = undefined;
-                inline for ([_]comptime_int{ 0, 1, 2, 3 }) |row| {
-                    inline for ([_]comptime_int{ 0, 1, 2, 3 }) |col| {
+                inline for (0..4) |row| {
+                    inline for (0..4) |col| {
                         result.fields[row][col] = a.fields[col][row];
                     }
                 }
@@ -655,8 +655,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 if (items.len == 1)
                     return items[0];
                 var value = items[0];
-                var i: usize = 1;
-                while (i < items.len) : (i += 1) {
+                for (0..items.len) |i| {
                     value = value.mul(items[i]);
                 }
                 return value;
