@@ -655,7 +655,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 if (items.len == 1)
                     return items[0];
                 var value = items[0];
-                for (0..items.len) |i| {
+                for (1..items.len) |i| {
                     value = value.mul(items[i]);
                 }
                 return value;
