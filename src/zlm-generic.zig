@@ -579,10 +579,11 @@ pub fn SpecializeOn(comptime Real: type) type {
             pub fn createAngleAxis(axis: Vec3, angle: Real) Self {
                 const cos = @cos(angle);
                 const sin = @sin(angle);
-                const sum = axis.x + axis.y + axis.z;
-                const x = axis.x / sum;
-                const y = axis.y / sum;
-                const z = axis.z / sum;
+
+                const normalized = axis.normalize();
+                const x = normalized.x;
+                const y = normalized.y;
+                const z = normalized.z;
 
                 return Self{    
                     .fields = [4][4]Real{
