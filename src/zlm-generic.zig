@@ -569,9 +569,9 @@ pub fn SpecializeOn(comptime Real: type) type {
                 var result = Self.zero;
                 result.fields[0][0] = 1.0 / (aspect * tanHalfFovy);
                 result.fields[1][1] = 1.0 / (tanHalfFovy);
-                result.fields[2][2] = far / (far - near);
-                result.fields[2][3] = 1;
-                result.fields[3][2] = -(far * near) / (far - near);
+                result.fields[2][2] = - (far + near) / (far - near);
+                result.fields[2][3] = - 1;
+                result.fields[3][2] = -(2 * far * near) / (far - near);
                 return result;
             }
 
