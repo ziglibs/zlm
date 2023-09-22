@@ -577,18 +577,18 @@ pub fn SpecializeOn(comptime Real: type) type {
 
             /// creates a rotation matrix around a certain axis.
             pub fn createAngleAxis(axis: Vec3, angle: Real) Self {
-                var cos = @cos(angle);
-                var sin = @sin(angle);
-                var x = axis.x;
-                var y = axis.y;
-                var z = axis.z;
+                const cos = @cos(angle);
+                const sin = @sin(angle);
+                const x = axis.x;
+                const y = axis.y;
+                const z = axis.z;
 
-                return Self{
+                return Self{    
                     .fields = [4][4]Real{
-                        [4]Real{ cos + x * x * (1 - cos), x * y * (1 - cos) - z * sin, x * z * (1 - cos) + y * sin, 0 },
-                        [4]Real{ y * x * (1 - cos) + z * sin, cos + y * y * (1 - cos), y * z * (1 - cos) - x * sin, 0 },
-                        [4]Real{ z * x * (1 * cos) - y * sin, z * y * (1 - cos) + x * sin, cos + z * z * (1 - cos), 0 },
-                        [4]Real{ 0, 0, 0, 1 },
+                        [4]Real{ cos + x * x * (1 - cos),       x * y * (1 - cos) - z * sin,    x * z * (1 - cos) + y * sin, 0 },
+                        [4]Real{ y * x * (1 - cos) + z * sin,   cos + y * y * (1 - cos),        y * z * (1 - cos) - x * sin, 0 },
+                        [4]Real{ z * x * (1 - cos) - y * sin,   z * y * (1 - cos) + x * sin,    cos + z * z * (1 - cos),     0 },
+                        [4]Real{ 0,                             0,                              0,                           1 },
                     },
                 };
             }
