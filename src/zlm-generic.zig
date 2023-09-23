@@ -527,8 +527,8 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// `up` is the direction from the screen center to the upper screen border.
             pub fn createLook(eye: Vec3, direction: Vec3, up: Vec3) Self {
                 const f = direction.normalize();
-                const s = Vec3.cross(up, f).normalize();
-                const u = Vec3.cross(f, s);
+                const s = Vec3.cross(f, up).normalize();
+                const u = Vec3.cross(s, f);
 
                 var result = Self.identity;
                 result.fields[0][0] = s.x;
@@ -537,12 +537,12 @@ pub fn SpecializeOn(comptime Real: type) type {
                 result.fields[0][1] = u.x;
                 result.fields[1][1] = u.y;
                 result.fields[2][1] = u.z;
-                result.fields[0][2] = f.x;
-                result.fields[1][2] = f.y;
-                result.fields[2][2] = f.z;
-                result.fields[3][0] = -Vec3.dot(s, eye);
-                result.fields[3][1] = -Vec3.dot(u, eye);
-                result.fields[3][2] = -Vec3.dot(f, eye);
+                result.fields[0][2] = - f.x;
+                result.fields[1][2] = - f.y;
+                result.fields[2][2] = - f.z;
+                result.fields[3][0] = - Vec3.dot(s, eye);
+                result.fields[3][1] = - Vec3.dot(u, eye);
+                result.fields[3][2] = Vec3.dot(f, eye);
                 return result;
             }
 
