@@ -523,10 +523,10 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// Creates a look-at matrix.
             /// The matrix will create a transformation that can be used
             /// as a camera transform.
-            /// the camera is located at `eye` and will look into `center`.
+            /// the camera is located at `eye` and will look into `direction`.
             /// `up` is the direction from the screen center to the upper screen border.
-            pub fn createLook(eye: Vec3, center: Vec3, up: Vec3) Self {
-                const f = eye.sub(center).normalize();
+            pub fn createLook(eye: Vec3, direction: Vec3, up: Vec3) Self {
+                const f = direction.normalize();
                 const s = Vec3.cross(up, f).normalize();
                 const u = Vec3.cross(f, s);
 
