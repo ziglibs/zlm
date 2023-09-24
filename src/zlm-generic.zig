@@ -643,10 +643,10 @@ pub fn SpecializeOn(comptime Real: type) type {
                 var result = Self.identity;
                 result.fields[0][0] = 2 / (right - left);
                 result.fields[1][1] = 2 / (top - bottom);
-                result.fields[2][2] = 1 / (far - near);
-                result.fields[3][0] = -(right + left) / (right - left);
-                result.fields[3][1] = -(top + bottom) / (top - bottom);
-                result.fields[3][2] = -near / (far - near);
+                result.fields[2][2] = - 2 / (far - near);
+                result.fields[3][0] = - (right + left) / (right - left);
+                result.fields[3][1] = - (top + bottom) / (top - bottom);
+                result.fields[3][2] = - (far + near) / (far - near);
                 return result;
             }
 
