@@ -562,7 +562,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// `aspect` is the screen aspect ratio (width / height)
             /// `near` is the distance of the near clip plane, whereas `far` is the distance to the far clip plane.
             pub fn createPerspective(fov: Real, aspect: Real, near: Real, far: Real) Self {
-                std.debug.assert(@fabs(aspect - 0.001) > 0);
+                std.debug.assert(@abs(aspect - 0.001) > 0);
 
                 const tanHalfFovy = @tan(fov / 2);
 
