@@ -184,6 +184,17 @@ pub fn SpecializeOn(comptime Real: type) type {
                     return result;
                 }
 
+                /// returns a new vector where each component is clamped to the given range.
+                /// `min` and `max` must be of the same type as the vector, and every field of 
+                /// `min` must be smaller or equal to the corresponding field of `max`.
+                pub fn componentClamp(a: Self, min: Self, max: Self) Self {
+                    var result: Self = undefined;
+                    inline for (@typeInfo(Self).Struct.fields) |fld| {
+                        @field(result, fld.name) = std.math.clamp(@field(a, fld.name), @field(min, fld.name), @field(max, fld.name));
+                    }
+                    return result;
+                }
+
                 /// linear interpolation between two vectors
                 /// only works on float vectors (Real must be a float)
                 pub fn lerp(a: Self, b: Self, f: Real) Self {
