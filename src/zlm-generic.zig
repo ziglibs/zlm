@@ -73,6 +73,15 @@ pub fn SpecializeOn(comptime Real: type) type {
                     return result;
                 }
 
+                /// returns the negative of self
+                pub fn neg(self: Self) Self {
+                    var result: Self = undefined;
+                    inline for (@typeInfo(Self).Struct.fields) |fld| {
+                        @field(result, fld.name) = - @field(self, fld.name);
+                    }
+                    return result;
+                }
+
                 /// returns the dot product of two vectors.
                 /// This is the sum of products of all components.
                 pub fn dot(a: Self, b: Self) Real {
