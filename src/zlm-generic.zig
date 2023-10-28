@@ -267,6 +267,15 @@ pub fn SpecializeOn(comptime Real: type) type {
                     .y = @sin(angle) * vec.x + @cos(angle) * vec.y,
                 };
             }
+
+            /// rotates the vector around the origin
+            /// only works on float vectors (Real must be a float)
+            pub fn rotateSinCos(vec: Self, sin: Real, cos: Real) Self {
+                return Self{
+                    .x = cos * vec.x - sin * vec.y,
+                    .y = sin * vec.x + cos * vec.y,
+                };
+            }
         };
 
         /// 3-dimensional vector type.
