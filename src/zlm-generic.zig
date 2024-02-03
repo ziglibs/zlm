@@ -106,7 +106,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 /// returns either a normalized vector (`length() = 1`) or `zero` if the vector
                 /// has length 0.
                 pub fn normalize(vec: Self) Self {
-                    var len = vec.length();
+                    const len = vec.length();
                     return if (len != 0.0)
                         vec.scale(1.0 / vec.length())
                     else
@@ -117,7 +117,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 pub fn abs(a: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
-                        @field(result, fld.name) = std.math.fabs(@field(a, fld.name));
+                        @field(result, fld.name) = @abs(@field(a, fld.name));
                     }
                     return result;
                 }
@@ -170,7 +170,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 pub fn componentMin(a: Self, b: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
-                        @field(result, fld.name) = std.math.min(@field(a, fld.name), @field(b, fld.name));
+                        @field(result, fld.name) = @min(@field(a, fld.name), @field(b, fld.name));
                     }
                     return result;
                 }
@@ -179,7 +179,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 pub fn componentMax(a: Self, b: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
-                        @field(result, fld.name) = std.math.max(@field(a, fld.name), @field(b, fld.name));
+                        @field(result, fld.name) = @max(@field(a, fld.name), @field(b, fld.name));
                     }
                     return result;
                 }
@@ -443,7 +443,7 @@ pub fn SpecializeOn(comptime Real: type) type {
 
             /// identitiy matrix
             pub const identity = Mat2{
-                .fields = [2]Real{
+                .fields = [2][2]Real{
                     [2]Real{ 1, 0 },
                     [2]Real{ 0, 1 },
                 },
@@ -456,7 +456,7 @@ pub fn SpecializeOn(comptime Real: type) type {
 
             /// identitiy matrix
             pub const identity = Mat3{
-                .fields = [3]Real{
+                .fields = [3][3]Real{
                     [3]Real{ 1, 0, 0 },
                     [3]Real{ 0, 1, 0 },
                     [3]Real{ 0, 0, 1 },
@@ -586,11 +586,11 @@ pub fn SpecializeOn(comptime Real: type) type {
 
             /// creates a rotation matrix around a certain axis.
             pub fn createAngleAxis(axis: Vec3, angle: Real) Self {
-                var cos = @cos(angle);
-                var sin = @sin(angle);
-                var x = axis.x;
-                var y = axis.y;
-                var z = axis.z;
+                const cos = @cos(angle);
+                const sin = @sin(angle);
+                const x = axis.x;
+                const y = axis.y;
+                const z = axis.z;
 
                 return Self{
                     .fields = [4][4]Real{

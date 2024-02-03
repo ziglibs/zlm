@@ -1,0 +1,16 @@
+.{
+    .name = "zlm",
+    .version = "0.1.0",
+    .minimum_zig_version = "0.11.0",
+    .dependencies = .{},
+    .paths = .{
+        ".github",
+        ".gitignore",
+        "build.zig",
+        "build.zig.zon",
+        "LICENSE",
+        "README.md",
+        "src",
+        "zig.mod",
+    },
+}
