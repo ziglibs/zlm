@@ -115,7 +115,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 /// returns either a normalized vector (`length() = 1`) or `zero` if the vector
                 /// has length 0.
                 pub fn normalize(vec: Self) Self {
-                    var len = vec.length();
+                    const len = vec.length();
                     return if (len != 0.0)
                         vec.scale(1.0 / vec.length())
                     else
@@ -126,7 +126,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 pub fn abs(a: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
-                        @field(result, fld.name) = std.math.fabs(@field(a, fld.name));
+                        @field(result, fld.name) = @abs(@field(a, fld.name));
                     }
                     return result;
                 }
@@ -179,7 +179,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 pub fn componentMin(a: Self, b: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
-                        @field(result, fld.name) = std.math.min(@field(a, fld.name), @field(b, fld.name));
+                        @field(result, fld.name) = @min(@field(a, fld.name), @field(b, fld.name));
                     }
                     return result;
                 }
@@ -188,7 +188,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 pub fn componentMax(a: Self, b: Self) Self {
                     var result: Self = undefined;
                     inline for (@typeInfo(Self).Struct.fields) |fld| {
-                        @field(result, fld.name) = std.math.max(@field(a, fld.name), @field(b, fld.name));
+                        @field(result, fld.name) = @max(@field(a, fld.name), @field(b, fld.name));
                     }
                     return result;
                 }
@@ -285,6 +285,15 @@ pub fn SpecializeOn(comptime Real: type) type {
                 return Self{
                     .x = @cos(angle) * vec.x - @sin(angle) * vec.y,
                     .y = @sin(angle) * vec.x + @cos(angle) * vec.y,
+                };
+            }
+
+            /// rotates the vector around the origin
+            /// only works on float vectors (Real must be a float)
+            pub fn rotateSinCos(vec: Self, sin: Real, cos: Real) Self {
+                return Self{
+                    .x = cos * vec.x - sin * vec.y,
+                    .y = sin * vec.x + cos * vec.y,
                 };
             }
         };
@@ -454,7 +463,7 @@ pub fn SpecializeOn(comptime Real: type) type {
 
             /// identitiy matrix
             pub const identity = Mat2{
-                .fields = [2]Real{
+                .fields = [2][2]Real{
                     [2]Real{ 1, 0 },
                     [2]Real{ 0, 1 },
                 },
@@ -467,7 +476,7 @@ pub fn SpecializeOn(comptime Real: type) type {
 
             /// identitiy matrix
             pub const identity = Mat3{
-                .fields = [3]Real{
+                .fields = [3][3]Real{
                     [3]Real{ 1, 0, 0 },
                     [3]Real{ 0, 1, 0 },
                     [3]Real{ 0, 0, 1 },
@@ -582,7 +591,7 @@ pub fn SpecializeOn(comptime Real: type) type {
             /// `aspect` is the screen aspect ratio (width / height)
             /// `near` is the distance of the near clip plane, whereas `far` is the distance to the far clip plane.
             pub fn createPerspective(fov: Real, aspect: Real, near: Real, far: Real) Self {
-                std.debug.assert(@fabs(aspect - 0.001) > 0);
+                std.debug.assert(@abs(aspect - 0.001) > 0);
 
                 const tanHalfFovy = @tan(fov / 2);
 
@@ -677,7 +686,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 if (items.len == 1)
                     return items[0];
                 var value = items[0];
-                for (0..items.len) |i| {
+                for (1..items.len) |i| {
                     value = value.mul(items[i]);
                 }
                 return value;
