@@ -1,7 +1,14 @@
 .{
-    .name = "zlm",
-    .version = "0.1.0",
-    .minimum_zig_version = "0.11.0",
+    .name = .zlm, // names aren't strings anymore
+    .version = "0.2.0", // to 0.2.0 since it is a breaking change
+    .minimum_zig_version = "0.14.0",
+    // When forking a Zig project, this id should be regenerated (delete the
+    // field and run `zig build`) if the upstream project is still maintained.
+    // Otherwise, the fork is *hostile*, attempting to take control over the
+    // original project's identity. Thus it is recommended to leave the comment
+    // on the following line intact, so that it shows up in code reviews that
+    // modify the field.
+    // .fingerprint = TODO(0x[16 hex digits]), // Changing this has security and trust implications.
     .dependencies = .{},
     .paths = .{
         ".github",
