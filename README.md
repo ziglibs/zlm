@@ -1,5 +1,5 @@
 # zlm
-Zig linear mathemathics library.
+Zig linear mathematics library.
 
 Current provides the following types:
 

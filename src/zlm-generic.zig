@@ -461,7 +461,7 @@ pub fn SpecializeOn(comptime Real: type) type {
         pub const Mat2 = extern struct {
             fields: [2][2]Real, // [row][col]
 
-            /// identitiy matrix
+            /// identity matrix
             pub const identity = Mat2{
                 .fields = [2][2]Real{
                     [2]Real{ 1, 0 },
@@ -474,7 +474,7 @@ pub fn SpecializeOn(comptime Real: type) type {
         pub const Mat3 = extern struct {
             fields: [3][3]Real, // [row][col]
 
-            /// identitiy matrix
+            /// identity matrix
             pub const identity = Mat3{
                 .fields = [3][3]Real{
                     [3]Real{ 1, 0, 0 },
@@ -499,7 +499,7 @@ pub fn SpecializeOn(comptime Real: type) type {
                 },
             };
 
-            /// identitiy matrix
+            /// identity matrix
             pub const identity = Self{
                 .fields = [4][4]Real{
                     [4]Real{ 1, 0, 0, 0 },
