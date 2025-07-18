@@ -527,9 +527,9 @@ pub fn SpecializeOn(comptime Real: type) type {
                     inline for (0..4) |col| {
                         var sum: Real = 0.0;
                         inline for (0..4) |i| {
-                            sum += a.fields[row][i] * b.fields[i][col];
+                            sum += a.fields[i][row] * b.fields[col][i];
                         }
-                        result.fields[row][col] = sum;
+                        result.fields[col][row] = sum;
                     }
                 }
                 return result;
