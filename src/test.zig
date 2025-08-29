@@ -2,16 +2,18 @@ const std = @import("std");
 const math = @import("zlm.zig");
 const assert = std.debug.assert;
 
-const vec2 = math.vec2;
-const vec3 = math.vec3;
-const vec4 = math.vec4;
+const math_f32 = math.SpecializeOn(f32);
 
-const Vec2 = math.Vec2;
-const Vec3 = math.Vec3;
-const Vec4 = math.Vec4;
+const vec2 = math_f32.vec2;
+const vec3 = math_f32.vec3;
+const vec4 = math_f32.vec4;
 
-const Mat3 = math.Mat3;
-const Mat4 = math.Mat4;
+const Vec2 = math_f32.Vec2;
+const Vec3 = math_f32.Vec3;
+const Vec4 = math_f32.Vec4;
+
+const Mat3 = math_f32.Mat3;
+const Mat4 = math_f32.Mat4;
 
 test "default generic is f32" {
     const T = @TypeOf(vec2(1, 2).x);
