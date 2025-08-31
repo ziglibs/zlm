@@ -2,7 +2,7 @@ const std = @import("std");
 const math = @import("zlm.zig");
 const assert = std.debug.assert;
 
-const math_f32 = math.SpecializeOn(f32);
+const math_f32 = math.as(f32);
 
 const vec2 = math_f32.vec2;
 const vec3 = math_f32.vec3;
@@ -20,8 +20,8 @@ test "default generic is f32" {
     try std.testing.expectEqual(T, f32);
 }
 
-test "SpecializeOn()" {
-    const math_u64 = math.SpecializeOn(u64);
+test "as()" {
+    const math_u64 = math.as(u64);
     const T = @TypeOf(math_u64.vec2(3, 4).x);
     try std.testing.expectEqual(T, u64);
 }

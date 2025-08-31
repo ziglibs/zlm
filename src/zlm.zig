@@ -1,1 +1,1 @@
-pub const SpecializeOn = @import("zlm-generic.zig").SpecializeOn;
+pub const as = @import("zlm-generic.zig").as;
