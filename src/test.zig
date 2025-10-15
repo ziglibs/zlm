@@ -238,3 +238,29 @@ test "vec4 swizzle" {
     assert(std.meta.eql(vec4(3, 4, 2, 1), vec4(1, 2, 3, 4).swizzle("zwyx")));
     assert(std.meta.eql(@as(f32, 3), vec4(1, 2, 3, 4).swizzle("z")));
 }
+
+test "vec2 format" {
+    try std.testing.expectFmt("vec2(1.00, 2.00)", "{f}", .{vec2(1, 2)});
+}
+
+test "vec3 format" {
+    try std.testing.expectFmt("vec3(1.00, 2.00, 3.00)", "{f}", .{vec3(1, 2, 3)});
+}
+
+test "vec4 format" {
+    try std.testing.expectFmt("vec4(1.00, 2.00, 3.00, 4.00)", "{f}", .{vec4(1, 2, 3, 4)});
+}
+
+test "mat4 format" {
+    const mat = Mat4{
+        .fields = [4][4]f32{
+            // zig fmt: off
+            [4]f32{ 1,  2,  3,  4 },
+            [4]f32{ 5,  6,  7,  8 },
+            [4]f32{ 9,  10, 11, 12 },
+            [4]f32{ 13, 14, 15, 16 },
+            // zig-fmt: on
+        },
+    };
+    try std.testing.expectFmt("mat4{ (1.00 2.00 3.00 4.00) (5.00 6.00 7.00 8.00) (9.00 10.00 11.00 12.00) (13.00 14.00 15.00 16.00) }", "{f}", .{mat});
+}

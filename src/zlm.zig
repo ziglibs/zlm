@@ -255,8 +255,8 @@ pub fn as(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
-                try stream.print("vec2({d:.2}, {d:.2})", .{ value.x, value.y });
+            pub fn format(this: Self, writer: *std.Io.Writer) !void {
+                try writer.print("vec2({d:.2}, {d:.2})", .{ this.x, this.y });
             }
 
             fn getField(vec: Self, comptime index: comptime_int) Real {
@@ -343,8 +343,8 @@ pub fn as(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
-                try stream.print("vec3({d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z });
+            pub fn format(value: Self, writer: *std.Io.Writer) !void {
+                try writer.print("vec3({d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z });
             }
 
             /// calculates the cross product. result will be perpendicular to a and b.
@@ -474,8 +474,8 @@ pub fn as(comptime Real: type) type {
                 };
             }
 
-            pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
-                try stream.print("vec4({d:.2}, {d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z, value.w });
+            pub fn format(value: Self, writer: *std.Io.Writer) !void {
+                try writer.print("vec4({d:.2}, {d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z, value.w });
             }
 
             /// multiplies the vector with a matrix.
@@ -578,15 +578,15 @@ pub fn as(comptime Real: type) type {
                 },
             };
 
-            pub fn format(value: Self, comptime _: []const u8, _: std.fmt.FormatOptions, stream: anytype) !void {
-                try stream.writeAll("mat4{");
+            pub fn format(value: Self, writer: *std.Io.Writer) !void {
+                try writer.writeAll("mat4{");
 
                 inline for (0..4) |i| {
                     const row = value.fields[i];
-                    try stream.print(" ({d:.2} {d:.2} {d:.2} {d:.2})", .{ row[0], row[1], row[2], row[3] });
+                    try writer.print(" ({d:.2} {d:.2} {d:.2} {d:.2})", .{ row[0], row[1], row[2], row[3] });
                 }
 
-                try stream.writeAll(" }");
+                try writer.writeAll(" }");
             }
 
             /// performs matrix multiplication of a*b
