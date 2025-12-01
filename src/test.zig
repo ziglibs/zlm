@@ -7,10 +7,12 @@ const math_f32 = math.as(f32);
 const vec2 = math_f32.vec2;
 const vec3 = math_f32.vec3;
 const vec4 = math_f32.vec4;
+const quat = math_f32.quat;
 
 const Vec2 = math_f32.Vec2;
 const Vec3 = math_f32.Vec3;
 const Vec4 = math_f32.Vec4;
+const Quat = math_f32.Quat;
 
 const Mat3 = math_f32.Mat3;
 const Mat4 = math_f32.Mat4;
@@ -263,4 +265,116 @@ test "mat4 format" {
         },
     };
     try std.testing.expectFmt("mat4{ (1.00 2.00 3.00 4.00) (5.00 6.00 7.00 8.00) (9.00 10.00 11.00 12.00) (13.00 14.00 15.00 16.00) }", "{f}", .{mat});
+}
+
+test "quat constructor" {
+    const q = quat(1, 2, 3, 4);
+    assert(q.x == 1);
+    assert(q.y == 2);
+    assert(q.z == 3);
+    assert(q.w == 4);
+}
+
+test "quat identity" {
+    const id = Quat.identity;
+    assert(id.x == 0);
+    assert(id.y == 0);
+    assert(id.z == 0);
+    assert(id.w == 1);
+}
+
+test "quat length" {
+    const q = quat(1, 2, 3, 4);
+    assert(Quat.length2(q) == 30.0);
+    assert(Quat.length(q) == std.math.sqrt(30.0));
+}
+
+test "quat normalize" {
+    const q = quat(0, 0, 0, 2);
+    const n = Quat.normalize(q);
+    assert(n.x == 0);
+    assert(n.y == 0);
+    assert(n.z == 0);
+    assert(n.w == 1);
+}
+
+test "quat conjugate" {
+    const q = quat(1, 2, 3, 4);
+    const c = Quat.conjugate(q);
+    assert(c.x == -1);
+    assert(c.y == -2);
+    assert(c.z == -3);
+    assert(c.w == 4);
+}
+
+test "quat mul identity" {
+    const q = quat(1, 2, 3, 4);
+    const id = Quat.identity;
+
+    const q_times_id = Quat.mul(q, id);
+    const id_times_q = Quat.mul(id, q);
+
+    assert(std.meta.eql(q_times_id, q));
+    assert(std.meta.eql(id_times_q, q));
+}
+
+test "quat mul" {
+    const a = quat(1, 2, 3, 4);
+    const b = quat(5, 6, 7, 8);
+
+    const result = Quat.mul(a, b);
+
+    // Quaternion multiplication by hand:
+    // w = 4*8 - 1*5 - 2*6 - 3*7 = 32 - 5 - 12 - 21 = -6
+    // x = 4*5 + 1*8 + 2*7 - 3*6 = 20 + 8 + 14 - 18 = 24
+    // y = 4*6 - 1*7 + 2*8 + 3*5 = 24 - 7 + 16 + 15 = 48
+    // z = 4*7 + 1*6 - 2*5 + 3*8 = 28 + 6 - 10 + 24 = 48
+    assert(result.x == 24);
+    assert(result.y == 48);
+    assert(result.z == 48);
+    assert(result.w == -6);
+}
+
+test "quat fromAxisAngle" {
+    const pi = std.math.pi;
+
+    // 180 degree rotation around Z axis
+    const q = Quat.fromAxisAngle(vec3(0, 0, 1), pi);
+
+    // sin(pi/2) = 1, cos(pi/2) = 0
+    try std.testing.expectApproxEqAbs(@as(f32, 0), q.x, 1e-6);
+    try std.testing.expectApproxEqAbs(@as(f32, 0), q.y, 1e-6);
+    try std.testing.expectApproxEqAbs(@as(f32, 1), q.z, 1e-6);
+    try std.testing.expectApproxEqAbs(@as(f32, 0), q.w, 1e-6);
+}
+
+test "quat rotateVec3" {
+    const pi = std.math.pi;
+
+    // 90 degree rotation around Z axis
+    const q = Quat.fromAxisAngle(vec3(0, 0, 1), pi / 2.0);
+    const v = vec3(1, 0, 0);
+    const rotated = Quat.rotateVec3(q, v);
+
+    // Rotating (1,0,0) by 90 degrees around Z should give (0,1,0)
+    try std.testing.expectApproxEqAbs(@as(f32, 0), rotated.x, 1e-6);
+    try std.testing.expectApproxEqAbs(@as(f32, 1), rotated.y, 1e-6);
+    try std.testing.expectApproxEqAbs(@as(f32, 0), rotated.z, 1e-6);
+}
+
+test "quat slerp" {
+    const id = Quat.identity;
+    const q = quat(0, 0, 0.7071068, 0.7071068); // ~90 degrees around Z
+
+    // slerp at t=0 should give first quaternion
+    const s0 = Quat.slerp(id, q, 0);
+    assert(Quat.approxEqAbs(s0, id, 1e-6));
+
+    // slerp at t=1 should give second quaternion
+    const s1 = Quat.slerp(id, q, 1);
+    assert(Quat.approxEqAbs(s1, q, 1e-6));
+}
+
+test "quat format" {
+    try std.testing.expectFmt("quat(1.00, 2.00, 3.00, 4.00)", "{f}", .{quat(1, 2, 3, 4)});
 }

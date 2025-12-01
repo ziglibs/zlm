@@ -6,6 +6,7 @@ Current provides the following types:
 - `Vec2`
 - `Vec3`
 - `Vec4`
+- `Quat`
 - `Mat2`
 - `Mat3`
 - `Mat4`
