@@ -12,9 +12,9 @@ jobs:
     name: zig test/fmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: mlugg/setup-zig@v2
         with:
-          version: 0.15.1
+          version: 0.17.0
       - run: zig build
       - run: zig fmt --check .

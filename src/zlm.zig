@@ -22,8 +22,8 @@ pub fn as(comptime Real: type) type {
                 /// Initializes all values of the vector with the given value.
                 pub fn all(value: Real) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = value;
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = value;
                     }
                     return result;
                 }
@@ -31,8 +31,8 @@ pub fn as(comptime Real: type) type {
                 /// adds all components from `a` with the components of `b`.
                 pub fn add(a: Self, b: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = @field(a, fld.name) + @field(b, fld.name);
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = @field(a, field_name) + @field(b, field_name);
                     }
                     return result;
                 }
@@ -40,8 +40,8 @@ pub fn as(comptime Real: type) type {
                 /// subtracts all components from `a` with the components of `b`.
                 pub fn sub(a: Self, b: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = @field(a, fld.name) - @field(b, fld.name);
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = @field(a, field_name) - @field(b, field_name);
                     }
                     return result;
                 }
@@ -49,8 +49,8 @@ pub fn as(comptime Real: type) type {
                 /// multiplies all components from `a` with the components of `b`.
                 pub fn mul(a: Self, b: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = @field(a, fld.name) * @field(b, fld.name);
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = @field(a, field_name) * @field(b, field_name);
                     }
                     return result;
                 }
@@ -58,8 +58,8 @@ pub fn as(comptime Real: type) type {
                 /// divides all components from `a` by the components of `b`.
                 pub fn div(a: Self, b: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = @field(a, fld.name) / @field(b, fld.name);
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = @field(a, field_name) / @field(b, field_name);
                     }
                     return result;
                 }
@@ -67,8 +67,8 @@ pub fn as(comptime Real: type) type {
                 /// multiplies all components by a scalar value.
                 pub fn scale(a: Self, b: Real) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = @field(a, fld.name) * b;
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = @field(a, field_name) * b;
                     }
                     return result;
                 }
@@ -76,8 +76,8 @@ pub fn as(comptime Real: type) type {
                 /// returns the negative of self
                 pub fn neg(self: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = -@field(self, fld.name);
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = -@field(self, field_name);
                     }
                     return result;
                 }
@@ -86,8 +86,8 @@ pub fn as(comptime Real: type) type {
                 /// This is the sum of products of all components.
                 pub fn dot(a: Self, b: Self) Real {
                     var result: Real = 0;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        result += @field(a, fld.name) * @field(b, fld.name);
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        result += @field(a, field_name) * @field(b, field_name);
                     }
                     return result;
                 }
@@ -125,8 +125,8 @@ pub fn as(comptime Real: type) type {
                 /// applies component-wise absolute values
                 pub fn abs(a: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = @abs(@field(a, fld.name));
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = @abs(@field(a, field_name));
                     }
                     return result;
                 }
@@ -178,8 +178,8 @@ pub fn as(comptime Real: type) type {
                 /// returns a new vector where each component is the minimum of the components of the input vectors.
                 pub fn componentMin(a: Self, b: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = @min(@field(a, fld.name), @field(b, fld.name));
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = @min(@field(a, field_name), @field(b, field_name));
                     }
                     return result;
                 }
@@ -187,8 +187,8 @@ pub fn as(comptime Real: type) type {
                 /// returns a new vector where each component is the maximum of the components of the input vectors.
                 pub fn componentMax(a: Self, b: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = @max(@field(a, fld.name), @field(b, fld.name));
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = @max(@field(a, field_name), @field(b, field_name));
                     }
                     return result;
                 }
@@ -198,8 +198,8 @@ pub fn as(comptime Real: type) type {
                 /// `min` must be smaller or equal to the corresponding field of `max`.
                 pub fn componentClamp(a: Self, min: Self, max: Self) Self {
                     var result: Self = undefined;
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        @field(result, fld.name) = std.math.clamp(@field(a, fld.name), @field(min, fld.name), @field(max, fld.name));
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        @field(result, field_name) = std.math.clamp(@field(a, field_name), @field(min, field_name), @field(max, field_name));
                     }
                     return result;
                 }
@@ -211,24 +211,24 @@ pub fn as(comptime Real: type) type {
                 }
 
                 pub fn eql(a: Self, b: Self) bool {
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        if (@field(a, fld.name) != @field(b, fld.name))
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        if (@field(a, field_name) != @field(b, field_name))
                             return false;
                     }
                     return true;
                 }
 
                 pub fn approxEqAbs(a: Self, b: Self, tolerance: Real) bool {
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        if (!std.math.approxEqAbs(Real, @field(a, fld.name), @field(b, fld.name), tolerance))
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        if (!std.math.approxEqAbs(Real, @field(a, field_name), @field(b, field_name), tolerance))
                             return false;
                     }
                     return true;
                 }
 
                 pub fn approxEqRel(a: Self, b: Self, tolerance: Real) bool {
-                    inline for (@typeInfo(Self).@"struct".fields) |fld| {
-                        if (!std.math.approxEqRel(Real, @field(a, fld.name), @field(b, fld.name), tolerance))
+                    inline for (@typeInfo(Self).@"struct".field_names) |field_name| {
+                        if (!std.math.approxEqRel(Real, @field(a, field_name), @field(b, field_name), tolerance))
                             return false;
                     }
                     return true;
