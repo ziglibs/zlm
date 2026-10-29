@@ -829,6 +829,219 @@ pub fn as(comptime Real: type) type {
             }
         };
 
+        /// Quaternion type for representing rotations.
+        pub const Quat = extern struct {
+            const Self = @This();
+
+            x: Real,
+            y: Real,
+            z: Real,
+            w: Real,
+
+            /// Identity quaternion (no rotation).
+            pub const identity = Self.new(0, 0, 0, 1);
+
+            pub fn new(x: Real, y: Real, z: Real, w: Real) Self {
+                return Self{
+                    .x = x,
+                    .y = y,
+                    .z = z,
+                    .w = w,
+                };
+            }
+
+            pub fn format(value: Self, writer: *std.Io.Writer) !void {
+                try writer.print("quat({d:.2}, {d:.2}, {d:.2}, {d:.2})", .{ value.x, value.y, value.z, value.w });
+            }
+
+            /// Returns the squared magnitude of the quaternion.
+            pub fn length2(q: Self) Real {
+                return q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
+            }
+
+            /// Returns the magnitude of the quaternion.
+            pub fn length(q: Self) Real {
+                return @sqrt(q.length2());
+            }
+
+            /// Normalizes the quaternion to unit length.
+            pub fn normalize(q: Self) Self {
+                const len = q.length();
+                if (len == 0) {
+                    return Self.identity;
+                }
+                const inv_len = 1.0 / len;
+                return Self{
+                    .x = q.x * inv_len,
+                    .y = q.y * inv_len,
+                    .z = q.z * inv_len,
+                    .w = q.w * inv_len,
+                };
+            }
+
+            /// Returns the conjugate of the quaternion.
+            pub fn conjugate(q: Self) Self {
+                return Self{
+                    .x = -q.x,
+                    .y = -q.y,
+                    .z = -q.z,
+                    .w = q.w,
+                };
+            }
+
+            /// Returns the inverse of the quaternion.
+            pub fn inverse(q: Self) Self {
+                const len2 = q.length2();
+                if (len2 == 0) {
+                    return Self.identity;
+                }
+                const conj = q.conjugate();
+                const inv_len2 = 1.0 / len2;
+                return Self{
+                    .x = conj.x * inv_len2,
+                    .y = conj.y * inv_len2,
+                    .z = conj.z * inv_len2,
+                    .w = conj.w * inv_len2,
+                };
+            }
+
+            /// Multiplies two quaternions (composes rotations).
+            pub fn mul(a: Self, b: Self) Self {
+                return Self{
+                    .x = a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
+                    .y = a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
+                    .z = a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w,
+                    .w = a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z,
+                };
+            }
+
+            /// Creates a quaternion from an axis and angle (in radians).
+            pub fn fromAxisAngle(axis: Vec3, angle: Real) Self {
+                const normalized = axis.normalize();
+                const half_angle = angle * 0.5;
+                const s = @sin(half_angle);
+                const c = @cos(half_angle);
+                return Self{
+                    .x = normalized.x * s,
+                    .y = normalized.y * s,
+                    .z = normalized.z * s,
+                    .w = c,
+                };
+            }
+
+            /// Creates a quaternion from Euler angles (in radians).
+            /// Order: roll (X), pitch (Y), yaw (Z).
+            pub fn fromEulerAngles(roll: Real, pitch: Real, yaw: Real) Self {
+                const cr = @cos(roll * 0.5);
+                const sr = @sin(roll * 0.5);
+                const cp = @cos(pitch * 0.5);
+                const sp = @sin(pitch * 0.5);
+                const cy = @cos(yaw * 0.5);
+                const sy = @sin(yaw * 0.5);
+
+                return Self{
+                    .x = sr * cp * cy - cr * sp * sy,
+                    .y = cr * sp * cy + sr * cp * sy,
+                    .z = cr * cp * sy - sr * sp * cy,
+                    .w = cr * cp * cy + sr * sp * sy,
+                };
+            }
+
+            /// Rotates a Vec3 by this quaternion.
+            pub fn rotateVec3(q: Self, v: Vec3) Vec3 {
+                // q * v * q^-1, optimized
+                const qv = Vec3.new(q.x, q.y, q.z);
+                const uv = Vec3.cross(qv, v);
+                const uuv = Vec3.cross(qv, uv);
+                return Vec3{
+                    .x = v.x + (uv.x * q.w + uuv.x) * 2.0,
+                    .y = v.y + (uv.y * q.w + uuv.y) * 2.0,
+                    .z = v.z + (uv.z * q.w + uuv.z) * 2.0,
+                };
+            }
+
+            /// Converts the quaternion to a 4x4 rotation matrix.
+            pub fn toMat4(q: Self) Mat4 {
+                const xx = q.x * q.x;
+                const yy = q.y * q.y;
+                const zz = q.z * q.z;
+                const xy = q.x * q.y;
+                const xz = q.x * q.z;
+                const yz = q.y * q.z;
+                const wx = q.w * q.x;
+                const wy = q.w * q.y;
+                const wz = q.w * q.z;
+
+                return Mat4{
+                    .fields = [4][4]Real{
+                        [4]Real{ 1.0 - 2.0 * (yy + zz), 2.0 * (xy + wz), 2.0 * (xz - wy), 0 },
+                        [4]Real{ 2.0 * (xy - wz), 1.0 - 2.0 * (xx + zz), 2.0 * (yz + wx), 0 },
+                        [4]Real{ 2.0 * (xz + wy), 2.0 * (yz - wx), 1.0 - 2.0 * (xx + yy), 0 },
+                        [4]Real{ 0, 0, 0, 1 },
+                    },
+                };
+            }
+
+            /// Spherical linear interpolation between two quaternions.
+            pub fn slerp(a: Self, b: Self, t: Real) Self {
+                var cos_theta = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+
+                // If the dot product is negative, negate one quaternion
+                // to take the shorter path
+                var b_adj = b;
+                if (cos_theta < 0) {
+                    b_adj = Self{
+                        .x = -b.x,
+                        .y = -b.y,
+                        .z = -b.z,
+                        .w = -b.w,
+                    };
+                    cos_theta = -cos_theta;
+                }
+
+                // If quaternions are very close, use linear interpolation
+                if (cos_theta > 0.9995) {
+                    const lerped = Self{
+                        .x = a.x + t * (b_adj.x - a.x),
+                        .y = a.y + t * (b_adj.y - a.y),
+                        .z = a.z + t * (b_adj.z - a.z),
+                        .w = a.w + t * (b_adj.w - a.w),
+                    };
+                    return lerped.normalize();
+                }
+
+                const theta = std.math.acos(cos_theta);
+                const sin_theta = @sin(theta);
+                const wa = @sin((1.0 - t) * theta) / sin_theta;
+                const wb = @sin(t * theta) / sin_theta;
+
+                return Self{
+                    .x = wa * a.x + wb * b_adj.x,
+                    .y = wa * a.y + wb * b_adj.y,
+                    .z = wa * a.z + wb * b_adj.z,
+                    .w = wa * a.w + wb * b_adj.w,
+                };
+            }
+
+            /// Returns the dot product of two quaternions.
+            pub fn dot(a: Self, b: Self) Real {
+                return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+            }
+
+            /// Checks if two quaternions are equal.
+            pub fn eql(a: Self, b: Self) bool {
+                return a.x == b.x and a.y == b.y and a.z == b.z and a.w == b.w;
+            }
+
+            /// Checks if two quaternions are approximately equal (absolute tolerance).
+            pub fn approxEqAbs(a: Self, b: Self, tolerance: Real) bool {
+                return std.math.approxEqAbs(Real, a.x, b.x, tolerance) and
+                    std.math.approxEqAbs(Real, a.y, b.y, tolerance) and
+                    std.math.approxEqAbs(Real, a.z, b.z, tolerance) and
+                    std.math.approxEqAbs(Real, a.w, b.w, tolerance);
+            }
+        };
+
         /// constructs a new Vec2.
         pub const vec2 = Vec2.new;
 
@@ -837,6 +1050,9 @@ pub fn as(comptime Real: type) type {
 
         /// constructs a new Vec4.
         pub const vec4 = Vec4.new;
+
+        /// constructs a new Quat.
+        pub const quat = Quat.new;
 
         /// Converts degrees to radian
         pub fn toRadians(deg: Real) Real {
